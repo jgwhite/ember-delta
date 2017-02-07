@@ -1,12 +1,29 @@
 <div style="flex-grow: 1; margin: 32px">
+  <p>
+    <label for="track-name">Track Name</label>
+    <input id="track-name" type="text" value={{patch.name}} oninput={{action (mut patch.name) value="target.value"}}>
+  </p>
+  <p>
+    <label for="artist-name">Artist Name</label>
+    <input id="artist-name" type="text" value={{patch.artist.name}} oninput={{action (mut patch.artist.name) value="target.value"}}>
+  </p>
+  <p>
+    {{#if patch.hasChanges}}
+      <button>
+        Save {{patch.changedKeys.length}} change{{unless (eq patch.changedKeys.length 1) "s"}}
+      </button>
+    {{else}}
+      <button disabled>No changes</button>
+    {{/if}}
+  </p>
   <article style="position: relative; width: 100%; height: auto; overflow: hidden; box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.5);">
     <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>" style="display: block; width: 100%; height: auto">
     <div style="display: block; position: absolute; width: auto; height: auto; top: -32px; right: -32px; bottom: -32px; left: -32px; filter: blur(32px)">
-      <img src={{model.artwork}} style="display: block; margin: 0; width: 100%; height: 100%">
+      <img src={{patch.artwork}} style="display: block; margin: 0; width: 100%; height: 100%">
     </div>
     <div style="position: absolute; bottom: 0; padding: 1rem; color: white; font-family: Helvetica Neue; font-weight: 100;">
-      <h1 style="margin: 0; font-weight: 300;">{{model.name}}</h1>
-      <h2 style="margin: 0; font-weight: 200;"><small style="font-weight: 100">by</small> {{model.artist.name}}</h2>
+      <h1 style="margin: 0; font-weight: 300;">{{patch.name}}</h1>
+      <h2 style="margin: 0; font-weight: 200;"><small style="font-weight: 100">by</small> {{patch.artist.name}}</h2>
     </div>
   </article>
 </div>
