@@ -7,15 +7,23 @@
     <label for="artist-name">Artist Name</label>
     <input id="artist-name" type="text" value={{patch.artist.name}} oninput={{action (mut patch.artist.name) value="target.value"}}>
   </p>
-  <p>
-    {{#if patch.hasChanges}}
-      <button>
-        Save {{patch.changedKeys.length}} change{{unless (eq patch.changedKeys.length 1) "s"}}
-      </button>
-    {{else}}
-      <button disabled>No changes</button>
-    {{/if}}
-  </p>
+  {{#if patch.hasChanges}}
+    <p>
+      <details>
+        <summary>
+          <button>
+            Save {{patch.changedKeys.length}} change{{unless (eq patch.changedKeys.length 1) "s"}}
+          </button>
+        </summary>
+        <dl>
+          {{#each-in patch.values as |key value|}}
+            <dt>{{key}}:</dt>
+            <dd>“{{get model key}}” → “{{value}}”</dd>
+          {{/each-in}}
+        </dl>
+      </details>
+    </p>
+  {{/if}}
   <article style="position: relative; width: 100%; height: auto; overflow: hidden; box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.5);">
     <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>" style="display: block; width: 100%; height: auto">
     <div style="display: block; position: absolute; width: auto; height: auto; top: -32px; right: -32px; bottom: -32px; left: -32px; filter: blur(32px)">
