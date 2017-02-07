@@ -1,0 +1,9 @@
+<ul class="tracks__list">
+  {{#each model as |track|}}
+    <li class="tracks__item">
+      {{#link-to "tracks.track" track class="tracks__link"}}
+        {{track.name}} by {{track.artist.name}}
+      {{/link-to}}
+    </li>
+  {{/each}}
+</ul>

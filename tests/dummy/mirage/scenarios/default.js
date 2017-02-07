@@ -1,4 +1,9 @@
-export default function(/* server */) {
+export default function(server) {
+  server.createList('artist', 10);
+
+  server.schema.artists.all().models.forEach(artist => {
+    server.create('track', { artist });
+  });
 
   /*
     Seed your development database using your factories.
