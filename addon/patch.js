@@ -1,6 +1,6 @@
 import EmberObject from 'ember-object';
 import Relay from './-private/relay';
-import computed, { notEmpty, not } from 'ember-computed';
+import computed from 'ember-computed';
 import { typeOf } from 'ember-utils';
 
 export default EmberObject.extend({
@@ -62,18 +62,6 @@ export default EmberObject.extend({
       case 'instance':
       case 'object':
         return Relay.create({ parent, key });
-      case 'array':
-      case 'boolean':
-      case 'class':
-      case 'date':
-      case 'error':
-      case 'filelist':
-      case 'function':
-      case 'null':
-      case 'number':
-      case 'regexp':
-      case 'string':
-      case 'undefined':
       default:
         return original;
     }
