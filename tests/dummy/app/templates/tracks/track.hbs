@@ -1,37 +1,47 @@
-<div class="track__container">
-  <p>
-    <label for="track-name">Track Name</label>
-    <input id="track-name" type="text" value={{patch.name}} oninput={{action (mut patch.name) value="target.value"}}>
-  </p>
-  <p>
-    <label for="artist-name">Artist Name</label>
-    <input id="artist-name" type="text" value={{patch.artist.name}} oninput={{action (mut patch.artist.name) value="target.value"}}>
-  </p>
-  {{#if patch.hasChanges}}
+{{#with (patch-for model) as |model|}}
+  <div class="track__container">
+
     <p>
-      <details>
-        <summary>
-          <button>
-            Save {{patch.changedKeys.length}} change{{unless (eq patch.changedKeys.length 1) "s"}}
-          </button>
-        </summary>
-        <dl>
-          {{#each-in patch.values as |key value|}}
-            <dt>{{key}}:</dt>
-            <dd>“{{get model key}}” → “{{value}}”</dd>
-          {{/each-in}}
-        </dl>
-      </details>
+      <label for="track-name">Track Name</label>
+      <input id="track-name" type="text" value={{model.name}} oninput={{action (mut model.name) value="target.value"}}>
     </p>
-  {{/if}}
-  <article class="track__article">
-    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>" class="track__prop">
-    <div class="track__artwork">
-      <img src={{patch.artwork}} class="track__artwork__img">
-    </div>
-    <div class="track__text">
-      <h1 class="track__h1">{{patch.name}}</h1>
-      <h2 class="track__h2"><small class="track__text__prefix">by</small> {{patch.artist.name}}</h2>
-    </div>
-  </article>
-</div>
+
+    <p>
+      <label for="artist-name">Artist Name</label>
+      <input id="artist-name" type="text" value={{model.artist.name}} oninput={{action (mut model.artist.name) value="target.value"}}>
+    </p>
+
+    {{#if model.changes.length}}
+      <p>
+        <details>
+          <summary>
+            <button type="submit">
+              Save {{model.changes.length}} change{{unless (eq model.changes.length 1) "s"}}
+            </button>
+          </summary>
+          <dl>
+            {{#each model.changes as |change|}}
+              <dt>{{change.key}}:</dt>
+              <dd>
+                “{{change.oldValue}}” → “{{change.newValue}}”
+                <button type="reset" onclick={{action (mut (get model change.key)) change.oldValue}}>Revert</button>
+              </dd>
+            {{/each}}
+          </dl>
+        </details>
+      </p>
+    {{/if}}
+
+    <article class="track__article">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>" class="track__prop">
+      <div class="track__artwork">
+        <img src={{model.artwork}} class="track__artwork__img">
+      </div>
+      <div class="track__text">
+        <h1 class="track__h1">{{model.name}}</h1>
+        <h2 class="track__h2"><small class="track__text__prefix">by</small> {{model.artist.name}}</h2>
+      </div>
+    </article>
+
+  </div>
+{{/with}}

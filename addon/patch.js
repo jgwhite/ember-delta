@@ -1,20 +1,27 @@
 import EmberObject from 'ember-object';
 import Relay from './-private/relay';
 import computed, { notEmpty, not } from 'ember-computed';
+import { typeOf } from 'ember-utils';
 
 export default EmberObject.extend({
   source: null,
   values: null,
 
-  changedKeys: computed('values', function() {
-    return Object.keys(this.get('values'));
+  changes: computed('values', function() {
+    let values = this.get('values');
+    let keys = Object.keys(values);
+
+    return keys.map(key => {
+      let oldValue = this.get(`source.${key}`);
+      let newValue = values[key];
+
+      return { key, oldValue, newValue };
+    });
   }),
-  hasChanges: notEmpty('changedKeys'),
-  hasNoChanges: not('hasChanges'),
 
   init() {
     this._super(...arguments);
-    this.set('values', {});
+    this.values = {};
   },
 
   unknownProperty(key) {
@@ -29,7 +36,7 @@ export default EmberObject.extend({
   setValue(key, value) {
     let values = this.get('values');
     let original = this.get(`source.${key}`);
-    let keyRoot = key.split('.')[0];
+    let [root] = key.split('.');
 
     if (value !== original) {
       values[key] = value;
@@ -37,24 +44,38 @@ export default EmberObject.extend({
       Reflect.deleteProperty(values, key);
     }
 
-    this.notifyPropertyChange(keyRoot);
+    this.notifyPropertyChange(root);
     this.notifyPropertyChange('values');
   },
 
   getValue(key) {
     let values = this.get('values');
-    let value = values[key];
 
-    if (value) {
-      return value;
+    if (values.hasOwnProperty(key)) {
+      return values[key];
     }
 
     let original = this.get(`source.${key}`);
+    let parent = this;
 
-    if (original instanceof EmberObject) {
-      return Relay.create({ parent: this, key });
-    } else {
-      return original;
+    switch (typeOf(original)) {
+      case 'instance':
+      case 'object':
+        return Relay.create({ parent, key });
+      case 'array':
+      case 'boolean':
+      case 'class':
+      case 'date':
+      case 'error':
+      case 'filelist':
+      case 'function':
+      case 'null':
+      case 'number':
+      case 'regexp':
+      case 'string':
+      case 'undefined':
+      default:
+        return original;
     }
   }
 });
