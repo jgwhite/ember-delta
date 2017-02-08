@@ -23,7 +23,7 @@ body > .ember-view {
 }
 
 .application__master {
-  border-right: 1px solid #fafafa;
+  border-right: 1px solid #ddd;
   overflow: auto;
 }
 
@@ -41,7 +41,7 @@ body > .ember-view {
 }
 
 .tracks__item {
-  border-bottom: 1px solid #fafafa;
+  border-bottom: 1px solid #ddd;
 }
 
 .tracks__link {
@@ -64,7 +64,7 @@ body > .ember-view {
 
 .track__editor__field {
   display: flex;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   margin: 0.25rem 0;
 }
 
@@ -79,7 +79,7 @@ body > .ember-view {
 }
 
 .track__editor__label {
-  color: #ccc;
+  color: #ddd;
 }
 
 .track__editor__input {
